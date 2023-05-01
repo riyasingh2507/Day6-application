@@ -1,0 +1,128 @@
+<form class="w-50 row form m-auto mt-5 border rounded p-3 shadow" #userForm="ngForm" (ngSubmit)="onSubmit(userForm)" >
+  <h1>Registration Form</h1>
+  <mat-form-field>
+    <mat-label>First Name</mat-label>
+    <input matInput placeholder="Harry" type="text" name="firstName" #firstName="ngModel" minlength="4"
+      [(ngModel)]="user.firstName" required onkeydown="return /[a-zA-Z\s.]/i.test(event.key)"
+      [class.is-valid]=" firstName.valid && (firstName.dirty || firstName.touched)"
+      [class.is-invalid]=" firstName.invalid && (firstName.dirty || firstName.touched)">
+  </mat-form-field>
+  <div class="alert alert-danger w-75 ms-3" *ngIf="firstName.errors && (firstName.dirty || firstName.touched)">
+    <span *ngIf="firstName.errors?.['required']" style="color: red;">
+      First Name is required.
+    </span>
+    <span *ngIf="firstName.errors?.['minlength'] " style="color: red;">
+      First Name must be at least 4 characters long.
+    </span>
+
+  </div>
+
+
+  <mat-form-field appearance="fill">
+    <mat-label>Last Name</mat-label>
+    <input matInput placeholder="Porter" name="lastName" #lastName="ngModel" minlength="4"
+      onkeydown="return /[a-zA-Z\s.]/i.test(event.key)" pattern="^[a-zA-Z]+$" [(ngModel)]="user.lastName" required
+      [class.is-valid]=" lastName.valid && (lastName.dirty || lastName.touched)"
+      [class.is-invalid]=" lastName.invalid && (lastName.dirty || lastName.touched)">
+  </mat-form-field>
+  <div class="alert alert-danger w-75 ms-3" *ngIf="lastName.errors && (lastName.dirty || lastName.touched)">
+    <span *ngIf="lastName.errors?.['required']" style="color: red;">
+      Last Name is required.
+    </span>
+    <span *ngIf="lastName.errors?.['minlength'] " style="color: red;">
+      Last Name must be at least 4 characters long.
+    </span>
+
+  </div>
+
+
+
+  <mat-form-field appearance="fill">
+    <mat-label>Email</mat-label>
+    <input matInput placeholder="admin@123.com" type="email" class="form-control" name="email" #email="ngModel"
+      [(ngModel)]="user.email" pattern="^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$" required
+      [class.is-valid]="email.valid && (email.dirty || email.touched)"
+      [class.is-invalid]="email.invalid && (email.dirty || email.touched)">
+    <div class="alert alert-danger w-75 ms-3" *ngIf="email.errors && (email.dirty || email.touched)">
+      <span *ngIf="email.errors?.['required']" style="color: red;">
+        Email is required.
+      </span>
+      <span *ngIf="email.errors?.['pattern'] " style="color: red;">
+        Email is invalid
+      </span>
+    </div>
+
+  </mat-form-field>
+
+
+  <mat-form-field appearance="fill">
+    <mat-label>Password</mat-label>
+    <input matInput [type]="hide ? 'password' : 'text'" type="password" class="form-control" name="password"
+      [(ngModel)]="user.password" required #password="ngModel" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+      [class.is-valid]="password.valid && (password.dirty || password.touched)"
+      [class.is-invalid]="password.invalid && (password.dirty || password.touched)">
+    <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+      [attr.aria-pressed]="hide">
+      <mat-icon matSuffix>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+    </button>
+    <div class="alert alert-danger w-75 ms-3" *ngIf="password.errors && (password.dirty || password.touched)">
+      <span *ngIf="password.errors?.['required'] || password.errors?.['pattern']" style="color: red;">Password must
+        contain one small letter, one capital letter,
+        one special character,one number. Password must be of 8 character (Eg.: Admin@123)</span>
+    </div>
+  </mat-form-field>
+
+
+
+  <mat-form-field appearance="fill">
+    <mat-label>Department</mat-label>
+    <mat-select class="form-control" name="department" #department="ngModel" [(ngModel)]="user.department" required
+      [class.is-valid]="department.valid && (department.dirty || department.touched)"
+      [class.is-invalid]=" department.invalid && (department.dirty || department.touched)">
+      <mat-option value="">Choose an option</mat-option>
+      <mat-option value=".NET">.NET</mat-option>
+      <mat-option value="Angular">Angular</mat-option>
+      <mat-option value="React">React</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+
+
+  <mat-label>Gender</mat-label>
+  <mat-radio-group aria-label="Select an option" class="form-control" name="gender" #gender="ngModel"
+    [(ngModel)]="user.gender" required [class.is-valid]="gender.valid && (gender.dirty || gender.touched)"
+    [class.is-invalid]=" gender.invalid && (gender.dirty || gender.touched)">
+    <mat-radio-button value="Male">Male</mat-radio-button>
+    <mat-radio-button value="Female">Female</mat-radio-button>
+  </mat-radio-group>
+
+
+
+  <mat-checkbox name="acceptTerms" [(ngModel)]="user.acceptTerms" required #acceptTerms="ngModel"
+    [class.is-valid]="acceptTerms.valid && (acceptTerms.dirty || acceptTerms.touched)"
+    [class.is-invalid]=" acceptTerms.invalid && (acceptTerms.dirty || acceptTerms.touched)">Accept Terms &
+    Conditions</mat-checkbox><br><br>
+
+  <div *ngIf="userForm.submitted && acceptTerms.errors" class="invalid-feedback">
+    Accept Terms is required
+  </div>
+  <div class="col-md-12 text-center ">
+    <button mat-raised-button color="primary" class="w-25" [disabled]="userForm.invalid">Submit</button>&nbsp;&nbsp;
+    <button mat-raised-button color="accent" class="w-25" (click)="onReset(userForm)">Reset</button>
+  </div>
+
+</form><br /><br><br>
+
+<div class="w-50 col-md-12 d-flex m-auto mt-3" *ngIf="display" >
+  <div class="col-md-6">
+    <img src="../assets/user.jpg" alt="Card image cap">
+  </div>
+  <div class="col-md-6 display-6">
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item"><b>Name:</b> {{user.firstName+ " "+user.lastName}}</li>
+      <li class="list-group-item"><b>Email:</b> {{user.email}}</li>
+      <li class="list-group-item"><b>Gender:</b> {{user.gender}}</li>
+      <li class="list-group-item"><b>Department:</b> {{user.department}}</li>
+    </ul>
+  </div>
+</div>

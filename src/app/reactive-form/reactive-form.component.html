@@ -1,0 +1,129 @@
+<form class="w-50 row form m-auto mt-5 border rounded p-3 shadow " [formGroup]="userForm"
+  (ngSubmit)="onSubmit()">
+  <h1>Registration Form</h1>
+  <mat-form-field appearance="fill">
+    <mat-label>First Name</mat-label>
+    <input matInput type="text" class="form-control" formControlName="firstName"  onkeydown="return /[a-zA-Z\s.]/i.test(event.key)">
+  </mat-form-field>
+  <div *ngIf="(userForm.controls['firstName'].touched ||userForm.controls['firstName'].dirty) && !userForm.controls['firstName'].valid"
+    class="alert alert-danger w-75 ms-3">
+    <span *ngIf="userForm.controls['firstName'].hasError('required')" style="color: red;">
+      Firstname is required
+    </span>
+    <span *ngIf="userForm.controls['firstName'].hasError('minlength')" style="color: red;">
+      Firstname must be at least 4 characters long.
+    </span>
+  </div>
+
+
+  <mat-form-field appearance="fill">
+    <mat-label>Last Name</mat-label>
+    <input matInput type="text" class="form-control" formControlName="lastName"  onkeydown="return /[a-zA-Z\s.]/i.test(event.key)">
+  </mat-form-field>
+  <div *ngIf="(userForm.controls['lastName'].touched ||userForm.controls['lastName'].dirty) && !userForm.controls['lastName'].valid"
+    class="alert alert-danger w-75 ms-3">
+    <span *ngIf="userForm.controls['lastName'].hasError('required')" style="color: red;">
+      Lastname is required
+    </span>
+    <span *ngIf="userForm.controls['lastName'].hasError('minlength')" style="color: red;">
+      Lastname must be at least 4 characters long.
+    </span>
+  </div>
+
+
+  <mat-form-field appearance="fill">
+    <mat-label>Username</mat-label>
+    <input matInput  type="text" formControlName="userName" [value]="getUsername" >
+    </mat-form-field>
+
+
+  <mat-form-field appearance="fill">
+    <mat-label>Email</mat-label>
+    <input matInput placeholder="admin@123.com" type="email" formControlName="email" class="form-control" >
+    <div class="alert alert-danger w-75 ms-3" *ngIf="(userForm.controls['email'].touched ||userForm.controls['email'].dirty) && !userForm.controls['email'].valid">
+      <span *ngIf="userForm.controls['email'].hasError('required')" style="color: red;">
+        Email is required.
+      </span>
+      <span *ngIf="userForm.controls['email'].hasError('email')" style="color: red;">
+        Email is invalid
+      </span>
+    </div>
+
+  </mat-form-field>
+
+
+  <mat-form-field appearance="fill">
+    <mat-label>Password</mat-label>
+    <input matInput [type]="hide ? 'password' : 'text'" type="password" class="form-control" name="password" formControlName="password" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">
+    <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+      [attr.aria-pressed]="hide">
+      <mat-icon matSuffix>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+    </button>
+    <div class="alert alert-danger w-75 ms-3" *ngIf="(userForm.controls['password'].touched ||userForm.controls['password'].dirty) && !userForm.controls['password'].valid">
+      <span *ngIf="userForm.controls['password'].hasError('required') ||
+      userForm.controls['password'].hasError('minlength') || userForm.controls['password'].hasError('pattern') " style="color: red;">
+      Password mustcontain one small letter, one capital letter,
+      one special character,one number. Password must be of 8 character (Eg.: Admin@123)
+      </span>
+    </div>
+  </mat-form-field>
+
+
+
+  <mat-form-field appearance="fill">
+    <mat-label>Department</mat-label>
+    <mat-select class="form-control" name="department" formControlName="department">
+      <mat-option value="">Choose an option</mat-option>
+      <mat-option value=".NET">.NET</mat-option>
+      <mat-option value="Angular">Angular</mat-option>
+      <mat-option value="React">React</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <div class="alert alert-danger w-75 ms-3" *ngIf="(userForm.controls['department'].touched ||userForm.controls['department'].dirty) && !userForm.controls['department'].valid">
+    <span *ngIf="userForm.controls['department'].hasError('required')" style="color: red;">
+      Department is required.
+    </span>
+  </div>
+
+
+
+  <mat-label>Gender</mat-label>
+  <mat-radio-group aria-label="Select an option"  name="gender" formControlName="gender" >
+    <mat-radio-button value="Male">Male</mat-radio-button>
+    <mat-radio-button value="Female">Female</mat-radio-button>
+  </mat-radio-group>
+  <div class="alert alert-danger w-75 ms-3" *ngIf="(userForm.controls['gender'].touched ||userForm.controls['gender'].dirty) && !userForm.controls['gender'].valid">
+    <span *ngIf="userForm.controls['gender'].hasError('required')" style="color: red;">
+      Gender is required.
+    </span>
+  </div>
+
+
+
+  <mat-checkbox name="acceptTerms" formControlName="acceptTerms" >Accept Terms & Conditions</mat-checkbox><br><br>
+  <div *ngIf="(userForm.controls['acceptTerms'].touched ||userForm.controls['acceptTerms'].dirty) && !userForm.controls['acceptTerms'].valid" class="invalid-feedback">
+    Accept Terms is required
+  </div>
+
+  <div class="col-md-12 text-center ">
+    <button mat-raised-button color="primary" class="w-25" [disabled]="userForm.invalid" type="submit">Submit</button>&nbsp;&nbsp;
+    <button mat-raised-button color="accent" class="w-25" (click)="onReset()" type="submit">Reset</button>
+  </div>
+
+
+</form><br /><br><br>
+
+<div class="w-50 col-md-12 d-flex m-auto mt-3" *ngIf="display">
+  <div class="col-md-6">
+    <img src="../assets/user.jpg" alt="Card image cap">
+  </div>
+  <div class="col-md-6 h5">
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item"><b>Name:</b> {{userForm.controls['firstName'].value + " "+userForm.controls['lastName'].value}}</li>
+      <li class="list-group-item"><b>Username:</b> {{userForm.controls['userName'].value}}</li>
+      <li class="list-group-item"><b>Email:</b> {{userForm.controls['email'].value}}</li>
+      <li class="list-group-item"><b>Gender:</b> {{userForm.controls['gender'].value}}</li>
+      <li class="list-group-item"><b>Department:</b> {{userForm.controls['department'].value}}</li>
+    </ul>
+  </div>
+</div>
